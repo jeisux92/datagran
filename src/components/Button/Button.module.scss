@@ -1,5 +1,5 @@
 .Button {
-  border-radius: 30px;
+  border-radius: 5px;
   outline: none;
   box-shadow: none;
   padding-bottom: 6px;
@@ -7,14 +7,13 @@
   padding-left: 16px;
   padding-right: 16px;
   margin: 5px;
-  background-image: linear-gradient(to bottom right, #E9ECEE, #44BAF0, #0DD5FB);
+  background: #1f628e;
   border: none;
   color: white;
   -webkit-transition-duration: 0.4s;
   transition-duration: 0.4s;
- }
- .Button:active {  
+}
+.Button:active {
   opacity: 1;
   transition: 0s;
- }
- 
+}

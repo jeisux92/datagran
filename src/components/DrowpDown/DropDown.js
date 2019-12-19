@@ -1,12 +1,12 @@
 import React from "react"
 
 
-const dropDown = () => {
+const dropDown = (props) => {
+    const options = props.data.length > 0 ? props.data.map(s => <option value={s}>{s}</option>) : <option>Seleccione el eje</option>;
 
     return (
         <select>
-            <option value="1">X Axis</option>
-            <option value="2">Y Axis</option>
+            {options}
         </select>
     )
 }
