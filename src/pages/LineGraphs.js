@@ -6,40 +6,11 @@ import Button from "../components/Button/Button";
 import DropDown from "../components/DrowpDown/DropDown";
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
-import Papa from "papaparse";
-import CsvHero from "csv-hero";
+
 const LineGraphs = () => {
 
     const [headers, setHeaders] = useState([]);
-    const onProcessHandler = () => {
-
-    }
-    const csvJSON = (str, headerList, quotechar = '"', delimiter = ',') => {
-        const cutlast = (_, i, a) => i < a.length - 1;
-        // const regex = /(?:[\t ]?)+("+)?(.*?)\1(?:[\t ]?)+(?:,|$)/gm; // no variable chars
-        const regex = new RegExp(`(?:[\\t ]?)+(${quotechar}+)?(.*?)\\1(?:[\\t ]?)+(?:${delimiter}|$)`, 'gm');
-        const lines = str.split('\n');
-        const headers = headerList || lines.splice(0, 1)[0].match(regex).filter(cutlast);
-        setHeaders(headers);
-        const list = [];
-
-        for (const line of lines) {
-            const val = {};
-            for (const [i, m] of [...line.matchAll(regex)].filter(cutlast).entries()) {
-                // Attempt to convert to Number if possible, also use null if blank
-                val[headers[i]] = (m[2].length > 0) ? Number(m[2]) || m[2] : null;
-            }
-            list.push(val);
-        }
-
-        return list;
-    }
-    const onCsvChangeHandler = (value) => {
-        CsvHero.parse(value).then(console.log);
-        
-    }
-
-    const options = {
+    const [options, setOptions] = useState({
         title: {
             text: 'My chart'
         },
@@ -51,7 +22,42 @@ const LineGraphs = () => {
         series: [{
             data: [[5, 2], [6, 3], [8, 2]]
         }]
+    });
+
+    const onProcessHandler = () => {
+
     }
+    const csvJSON = (csv) => {
+
+        var lines = csv.replace('"', "").split("\n");
+
+        var result = [];
+        var headers = [];
+        for (const headerItem of lines[0].split(",")) {
+            headers.push(headerItem.trim().replace(/['"]+/g, ''));
+        }
+
+        debugger
+        setHeaders(headers);
+        for (var i = 1; i < lines.length; i++) {
+
+            var obj = {};
+            var currentline = lines[i].split(",");
+
+            for (var j = 0; j < headers.length; j++) {
+                const current = currentline[j].trim().replace(/['"]+/g, '');
+                obj[headers[j]] = isNaN(current) ? current : +current;
+            }
+
+            result.push(obj);
+
+        }
+        return result;
+    }
+    const onCsvChangeHandler = (value) => {
+        console.log(csvJSON(value));
+    }
+
 
     return (
         <div className={classes.LineGraphs}>
