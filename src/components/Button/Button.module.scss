@@ -1,9 +1,20 @@
 .Button {
-  border-radius: 2px;
+  border-radius: 30px;
   outline: none;
   box-shadow: none;
-  background-color: red;
+  padding-bottom: 6px;
+  padding-top: 6px;
+  padding-left: 16px;
+  padding-right: 16px;
+  margin: 5px;
+  background-image: linear-gradient(to bottom right, #E9ECEE, #44BAF0, #0DD5FB);
   border: none;
   color: white;
-}
-
+  -webkit-transition-duration: 0.4s;
+  transition-duration: 0.4s;
+ }
+ .Button:active {  
+  opacity: 1;
+  transition: 0s;
+ }
+ 
