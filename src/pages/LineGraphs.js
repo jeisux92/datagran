@@ -4,11 +4,21 @@ import classes from "./LineGraphs.module.scss";
 import Csv from '../components/Csv/Csv';
 import Button from "../components/Button/Button";
 import DropDown from "../components/DrowpDown/DropDown";
-
+import Highcharts from 'highcharts'
+import HighchartsReact from 'highcharts-react-official'
 
 const lineGraphs = () => {
     const onProcessHandler = () => {
 
+    }
+
+    const options = {
+        title: {
+            text: 'My chart'
+        },
+        series: [{
+            data: [1, 2, 3]
+        }]
     }
 
     return (
@@ -22,12 +32,15 @@ const lineGraphs = () => {
                 </div>
             </div>
             <div className={classes.Middle}>
-                <div>
+                <div className={classes.AxisOptions}>
+                    <DropDown></DropDown>
                     <DropDown></DropDown>
                 </div>
-                <div>
-                    <DropDown></DropDown>
-                </div>
+
+                <HighchartsReact
+                    highcharts={Highcharts}
+                    options={options}
+                />
             </div>
         </div>
     );
