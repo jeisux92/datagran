@@ -1,17 +1,28 @@
 import React from 'react';
 import './App.css';
-import Csv from './components/csv';
-import Button from "./components/button";
+
+
+import {
+  BrowserRouter,
+  Switch,
+  Route
+} from "react-router-dom";
+
+
+
+import LineGraphs from "./pages/LineGraphs";
 
 function App() {
-  const onProcessHandler = () => {
- 
-  }
+
 
   return (
     <div className="App">
-      <Csv></Csv>
-      <Button onClick={onProcessHandler}>Process</Button>
+      <BrowserRouter>
+        <Switch>
+          <Route component={LineGraphs} path="/" exact />
+          <Route component={() => <h1>Posts</h1>} path="/posts" exact />
+        </Switch>
+      </BrowserRouter>
     </div>
   );
 }
