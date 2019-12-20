@@ -6,10 +6,10 @@ const Navbar = () => (
     <nav className={classes.Nav}>
         <ul>
             <li>
-                <NavLink to="/" activeClassName={classes.Selected}>High Charts</NavLink>
+                <NavLink to="/" exact activeClassName={classes.Selected}>High Charts</NavLink>
             </li>
             <li>
-                <NavLink to="/posts" activeClassName={classes.Selected}>Posts</NavLink>
+                <NavLink to="/posts" exact activeClassName={classes.Selected}>Posts</NavLink>
             </li>
         </ul>
     </nav>

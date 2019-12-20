@@ -1,13 +1,19 @@
 .Nav {
   ul {
+    padding-left: 0;
+    padding-bottom: 15px;
     li {
       list-style: none;
       float: left;
+      padding-right: 10px;
+      a {
+        text-decoration: none;
+      }
     }
   }
   padding-bottom: 15px;
 }
 
-// .Selected {
-//   color: blue;
-// }
+.Selected {
+  color: blue;
+}
