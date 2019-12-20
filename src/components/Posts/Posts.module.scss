@@ -1,0 +1,38 @@
+.ContainerTable {
+  height: 500px;
+  overflow: auto;
+  float: left;
+  margin-right: 40px;
+}
+
+.PostsTable {
+  padding: 1%;
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid black;
+  height: 100%;
+  th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #748675;
+    color: white;
+  }
+  th,
+  td {
+    border: 1px solid black;
+  }
+
+  tbody {
+    tr td:first-child {
+      cursor: pointer;
+    }
+  }
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+  tr:hover {
+    background-color: #ddd;
+  }
+}

@@ -1,52 +1,72 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import classes from "./LineGraphs.module.scss";
 // components
 import Csv from '../components/Csv/Csv';
 import Button from "../components/Button/Button";
 import DropDown from "../components/DrowpDown/DropDown";
-import Highcharts from 'highcharts'
+import Highcharts, { destroyObjectProperties } from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 
 const LineGraphs = () => {
 
     const [headers, setHeaders] = useState([]);
-    const [options, setOptions] = useState({
-        title: {
-            text: 'My chart'
-        },
-        yAxis: [{ //--- Primary yAxis
-            title: {
-                text: 'Temperature'
-            }
-        }],
-        series: [{
-            data: [[5, 2], [6, 3], [8, 2]]
-        }]
-    });
+    const [json, setJson] = useState([]);
+    const [xAxis, setXAxis] = useState("");
+    const [yAxis, setYAxis] = useState("");
+    const [csv, setCsv] = useState();
+
+
 
     const onProcessHandler = () => {
-
+        setJson(csvJSON(csv));
     }
-    const csvJSON = (csv) => {
 
-        var lines = csv.replace('"', "").split("\n");
+    const onXAxisChange = value => setXAxis(value);
 
-        var result = [];
-        var headers = [];
+    const onYAxisChange = value => setYAxis(value);
+
+
+    const csvJSON = csv => {
+
+        let lines = csv.replace('"', "").split("\n");
+
+        let result = [];
+        let headersCsv = [];
         for (const headerItem of lines[0].split(",")) {
-            headers.push(headerItem.trim().replace(/['"]+/g, ''));
+            headersCsv.push(headerItem.trim().replace(/['"]+/g, ''));
         }
 
-        debugger
-        setHeaders(headers);
-        for (var i = 1; i < lines.length; i++) {
 
-            var obj = {};
-            var currentline = lines[i].split(",");
+        let ignoredColumns = [];
+        for (let i = 1; i < lines.length; i++) {
 
-            for (var j = 0; j < headers.length; j++) {
+            let currentline = lines[i].split(",");
+            if (i == 1) {
+
+                headersCsv = headersCsv.filter((h, index) => {
+                    if (!isNaN(currentline[index])) {
+                        return true;
+                    }
+                    else {
+                        ignoredColumns.push(index);
+                        return false;
+                    }
+                });
+
+
+                setHeaders(headersCsv);
+                setXAxis(headersCsv[0]);
+                setYAxis(headersCsv[0]);
+            }
+            let obj = {};
+
+            currentline = currentline.filter((cL, index) => {
+                return ignoredColumns.findIndex(x => x == index) == -1;
+            });
+
+            for (let j = 0; j < headersCsv.length; j++) {
                 const current = currentline[j].trim().replace(/['"]+/g, '');
-                obj[headers[j]] = isNaN(current) ? current : +current;
+                obj[headersCsv[j]] = +current;
             }
 
             result.push(obj);
@@ -54,11 +74,51 @@ const LineGraphs = () => {
         }
         return result;
     }
+
     const onCsvChangeHandler = (value) => {
-        console.log(csvJSON(value));
+        setCsv(value);
     }
 
 
+    const options = {
+        title: {
+            text: 'Highchart'
+        },
+        xAxis: [{
+            title: {
+                text: xAxis
+            },
+            //categories: json.map(j => j[xAxis])
+        }],
+        yAxis: [{
+            title: {
+                text: yAxis
+            }
+        }],
+        series: [{
+            data: json.map(j => ({ x: j[xAxis], y: j[yAxis] })),
+        }]
+    };
+
+    let highcharts = null;
+    if (json.length) {
+        highcharts = <>
+            <div className={classes.AxisOptions}>
+                <div>
+                    <label>X Axis  </label>
+                    <DropDown data={headers} onChange={onXAxisChange} value={xAxis} />
+                </div>
+                <div>
+                    <label>Y Axis  </label>
+                    <DropDown data={headers} onChange={onYAxisChange} value={yAxis} />
+                </div>
+            </div>
+            <HighchartsReact
+                highcharts={Highcharts}
+                options={options}
+            />
+        </>
+    }
     return (
         <div className={classes.LineGraphs}>
             <div className={classes.Middle}>
@@ -70,17 +130,9 @@ const LineGraphs = () => {
                 </div>
             </div>
             <div className={classes.Middle}>
-                <div className={classes.AxisOptions}>
-                    <DropDown data={headers}></DropDown>
-                    <DropDown data={headers}></DropDown>
-                </div>
-
-                <HighchartsReact
-                    highcharts={Highcharts}
-                    options={options}
-                />
+                {highcharts}
             </div>
-        </div>
+        </div >
     );
 }
 

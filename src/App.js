@@ -8,14 +8,17 @@ import {
 } from "react-router-dom";
 
 import LineGraphs from "./pages/LineGraphs";
+import UserPosts from "./pages/UserPosts";
+import Navbar from './components/Navbar/Navbar';
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
+        <Navbar />
         <Switch>
-          <Route component={LineGraphs} path="/" exact />
-          <Route component={() => <h1>Posts</h1>} path="/posts" exact />
+          <Route component={UserPosts} path="/posts" exact />
+          <Route component={LineGraphs} path="/" />
         </Switch>
       </BrowserRouter>
     </div>
